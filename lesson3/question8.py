@@ -157,13 +157,33 @@ def MeasureTime(func,*args):
     return end_time-start_time
 
 if __name__=="__main__":
-    num_list = RandomNumsCreater(10000,10000,1)
-    print("冒泡排序用时：",MeasureTime(BubbleSort,num_list))
-    print("选择排序用时：",MeasureTime(SelectionSort,num_list))
-    print("插入排序用时：",MeasureTime(InsertSort,num_list))
-    print("快速排序用时：",MeasureTime(QuickSort,num_list))
-    print("堆排序用时：",MeasureTime(HeapSort,num_list))
-    print("归并排序用时：",MeasureTime(MergeSort,num_list))
-    print("计数排序用时：",MeasureTime(CountingSort,num_list))
-    print("基数排序用时：",MeasureTime(RadixSort,num_list))
-    print("桶排序用时：",MeasureTime(BucketSort,num_list))
+    times=100
+    BubbleSort_time = 0
+    SelectionSort_time = 0
+    InsertSort_time = 0
+    QuickSort_time = 0
+    HeapSort_time = 0
+    MergeSort_time = 0
+    CountingSort_time = 0
+    RadixSort_time = 0
+    BucketSort_time = 0
+    for i in range(times):
+        num_list = RandomNumsCreater(1000,10000,1)#生成1000个1-10000的随机数
+        BubbleSort_time += MeasureTime(BubbleSort,num_list)
+        SelectionSort_time += MeasureTime(SelectionSort,num_list)
+        InsertSort_time += MeasureTime(InsertSort,num_list)
+        QuickSort_time += MeasureTime(QuickSort,num_list)
+        HeapSort_time += MeasureTime(HeapSort,num_list)
+        MergeSort_time += MeasureTime(MergeSort,num_list)
+        CountingSort_time += MeasureTime(CountingSort,num_list)
+        RadixSort_time += MeasureTime(RadixSort,num_list)
+        BucketSort_time += MeasureTime(BucketSort,num_list)
+    print("冒泡排序平均时间：",BubbleSort_time/times)
+    print("选择排序平均时间：",SelectionSort_time/times)
+    print("插入排序平均时间：",InsertSort_time/times)
+    print("快速排序平均时间：",QuickSort_time/times)
+    print("堆排序平均时间：",HeapSort_time/times)
+    print("归并排序平均时间：",MergeSort_time/times)
+    print("计数排序平均时间：",CountingSort_time/times)
+    print("基数排序平均时间：",RadixSort_time/times)
+    print("桶排序平均时间：",BucketSort_time/times)    

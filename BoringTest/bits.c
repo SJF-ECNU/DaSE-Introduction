@@ -208,7 +208,10 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  return 2;
+  int y=x+1;
+//如果x为tmax，得到y为tmin，如果x为-1，得到y为0
+  return !(y^~x)&!!y;
+//如果y为tmin或者0，那么y^~x得到1，!y为1，当且仅当y不为0 时，!!y不为0
 }
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -219,7 +222,11 @@ int isTmax(int x) {
  *   Rating: 2
  */
 int allOddBits(int x) {
-  return 2;
+  int test=0xAA+(0xAA<<8);
+  test=test+(test<<16);
+//获得奇数位全为1的数
+  return !((test&x)^test);
+//test&x排除偶数位的影响，最后和test异或，如果全为1，那么异或后为0，取反后为1
 }
 /* 
  * negate - return -x 

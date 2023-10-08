@@ -236,7 +236,7 @@ int allOddBits(int x) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+  return ~x+1;
 }
 //3
 /* 
@@ -249,8 +249,14 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  return 2;
-}
+  int lower = 0x30;  // ASCII '0'
+  int upper = 0x39;  // ASCII '9'
+
+  // 判断 x 是否大于等于 lower 并且小于等于 upper
+  int isInRange = !((x + ~lower + 1) >> 31) & !((upper + ~x + 1) >> 31);
+  return isInRange;
+//第一次错误为没考虑到处于临界的情况，当前版本解决了这个问题，如果是临界就是0，取反得1
+} 
 /* 
  * conditional - same as x ? y : z 
  *   Example: conditional(2,4,5) = 4
@@ -259,7 +265,9 @@ int isAsciiDigit(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+  x=!!x;//将x转化为0或1
+  x=~x+1;//如果x为0则变成全0，反之为全1
+  return (x&y)|(~x&z);//如果输入的x为0，那么此处x为全0，x&y为全0，~x&z为z，反之亦然
 }
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
@@ -269,7 +277,9 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+  int flag=y+~x+1;
+  flag=flag>>31;
+  return flag+1;
 }
 //4
 /* 
@@ -281,7 +291,9 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4 
  */
 int logicalNeg(int x) {
-  return 2;
+  int y=~x+1;
+  int sign=(x|y)>>31;
+  return sign+1;
 }
 /* howManyBits - return the minimum number of bits required to represent x in
  *             two's complement

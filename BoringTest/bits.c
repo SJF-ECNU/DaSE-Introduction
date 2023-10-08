@@ -310,15 +310,23 @@ int logicalNeg(int x) {
  *  Rating: 4
  */
 int howManyBits(int x) {
-  int sign=(x>>31)&1;//获得符号位0或者1
-  int NumOfBits=0;//所需要的最小位数
+  int sign=x>>31;//获得符号位0或者1
+  x=(sign&~x)|(~sign&x);
+  int b16,b8,b4,b2,b1,b0;
+  //所需要的最小位数
   //16 8 4 2 1 的任意组合恰好可以组成1~32的任意数字，利用这个二分的方法来构造算法
-  NumOfBits += (!!(x>>16))<<4;//!!将非0数字变为1，如果为1，则说明至少需要16位
-  NumOfBits += (!!(x>>(8+NumOfBits)))<<3;//同上，但是注意的是这里的右移变成了8+NumOfBits
-  NumOfBits += (!!(x>>(4+NumOfBits)))<<2;
-  NumOfBits += (!!(x>>(2+NumOfBits)))<<1;
-  NumOfBits += !!(x>>(1+NumOfBits));
-  return NumOfBits+1+sign;
+  b16 = !!(x>>16)<<4;//!!使得非0数字转化为1，这样左移4位，获得16或者0
+  x = x>>b16;//则将原数右移b16位
+  b8 = !!(x>>8)<<3;//剩余位高8位是否有1
+  x = x>>b8;//右移b8位
+  b4 = !!(x>>4)<<2;//同理
+  x = x>>b4;
+  b2 = !!(x>>2)<<1;
+  x = x>>b2;
+  b1 = !!(x>>1);
+  x = x>>b1;
+  b0 = x;
+  return b16+b8+b4+b2+b1+b0+1;//+1表示加上符号位
 }
 //float
 /* 

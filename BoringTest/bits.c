@@ -341,7 +341,13 @@ int howManyBits(int x) {
  *   Rating: 4
  */
 unsigned floatScale2(unsigned uf) {
-  return 2;
+  int exp=(uf&0x7f800000)>>23;//获得符号位，其中0x7f800000为浮点数最大值，指数部分全1，其他部分全0，这样以获得指数部分
+  int sign=uf&(1<<31);//获得符号位置，即利用符号为1，其他部分为0的数字，与uf按位与，这一就获得了符号为为0或者1，其他的部分为全0的数字
+  if(exp==0) return uf<<1|sign;//如果exp为0，则说明这是一个非规格化的浮点数，直接左移一位即可，然后加上符号位，这是为了避免如果原本符号位为1，左移导致1变为0导致变号
+  if(exp==255) return uf;//如果exp==255，这说明输入的uf为无穷大或者为nan，直接返回即可
+  exp++;//如果前面的情况都不满足，exp位置加一即可完成乘2
+  if(exp==255) return 0x7f800000|sign;//如果加一后exp变为255，说明到达最大值，给定符号输出最大值即可
+  return (exp<<23)|(uf&0x807fffff);//最后一种情况，将exp恢复相应的位置，利用0x807fffff，即符号位为1，指数为全0，尾数为全1，和uf按位与可以获得uf的符号以及尾数，最终利用按位或将exp部分组合上去
 }
 /* 
  * floatFloat2Int - Return bit-level equivalent of expression (int) f

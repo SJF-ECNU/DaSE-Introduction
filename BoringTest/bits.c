@@ -362,6 +362,37 @@ unsigned floatScale2(unsigned uf) {
  *   Rating: 4
  */
 int floatFloat2Int(unsigned uf) {
-  return 2;
+  unsigned sign = uf>>31;//获得符号位
+  unsigned exp = (uf>>23)&0xff;//获得指数部分
+  unsigned frac = uf & 0x7fffff;//获得尾数部分
+  int result;
+
+  if(exp==0xff)
+    return 0x80000000u;
+  
+  exp-=127;
+
+  if(exp<0)
+    return 0;
+  
+  frac=frac|0x800000;
+  
+  if (exp > 31) {
+    return 0x80000000u; // 如果指数太大，返回0x80000000u
+  }
+
+  // 计算结果
+  if (exp > 23) {
+    result = frac << (exp - 23); // 右移动尾数
+  } else {
+    result = frac >> (23 - exp); // 左移动尾数
+  }
+
+  // 添加符号位
+  if (sign) {
+    result = -result;
+  }
+ 
+  return result;
 }
 // #include "floatPower2.c"

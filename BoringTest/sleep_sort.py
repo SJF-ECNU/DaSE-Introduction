@@ -3,7 +3,7 @@ import threading
 
 # 定义一个函数用于输出数字
 def output_number(number):
-    time.sleep(number)  # 休眠时间与数字大小成正比
+    time.sleep(number/10)  # 休眠时间与数字大小成正比
     print(number)
 
 # 待排序的数字列表

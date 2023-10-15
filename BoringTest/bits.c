@@ -279,7 +279,6 @@ int conditional(int x, int y, int z) {
 int isLessOrEqual(int x, int y) {//本题的关键在于处理int类型的溢出问题
   int ifSignDiff=((x^y)>>31)&1;//检测xy的符号是否不同
   int SignOfX=(x>>31)&1;//分别获得xy的符号，1为负数，0为正数
-  int SignOfY=(y>>31)&1;
   int SignOfDiff=(y+(~x+1))>>31&1;//获得y-x的符号，注意这里可能发生溢出
   return (!ifSignDiff&!SignOfDiff)|(ifSignDiff&SignOfX);//共有两种情况符合要求，第一种为符号相同，此时不会发生溢出，若y-x为非负数即可满足x<=y，第二种为xy符号不同，此时有且仅有x为负数是符合，直接检测x符号即可
 }
@@ -310,9 +309,9 @@ int logicalNeg(int x) {
  *  Rating: 4
  */
 int howManyBits(int x) {
+  int b16,b8,b4,b2,b1,b0;
   int sign=x>>31;//获得符号位0或者1
   x=(sign&~x)|(~sign&x);
-  int b16,b8,b4,b2,b1,b0;
   //所需要的最小位数
   //16 8 4 2 1 的任意组合恰好可以组成1~32的任意数字，利用这个二分的方法来构造算法
   b16 = !!(x>>16)<<4;//!!使得非0数字转化为1，这样左移4位，获得16或者0
@@ -368,7 +367,7 @@ int floatFloat2Int(unsigned uf) {
   int result;
 
   if(exp==0xff)
-    return 0x80000000u;
+    return 0x80000000;
   
   exp-=127;
 
@@ -378,7 +377,7 @@ int floatFloat2Int(unsigned uf) {
   frac=frac|0x800000;
   
   if (exp > 31) {
-    return 0x80000000u; // 如果指数太大，返回0x80000000u
+    return 0x80000000; // 如果指数太大，返回0x80000000
   }
 
   // 计算结果
